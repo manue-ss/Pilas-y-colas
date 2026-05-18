@@ -54,7 +54,10 @@ public class Equilibrador {
             vista.imprimir("Seleccione una opcion");
             vista.imprimir("1. Usar cadena preestablecida"); 
             vista.imprimir("2. Ingresar cadena"); 
-            int opcion = Integer.parseInt(vista.ingresar(""));
+            int opcion = -1;
+            try {
+                opcion = Integer.parseInt(vista.ingresar(""));
+            } catch (NumberFormatException e) {}
             switch (opcion){   
                 case 1:
                     casoPreestablecido();
@@ -79,7 +82,10 @@ public class Equilibrador {
             vista.imprimir("Seleccione una opcion");
             vista.imprimir("1. [()]"); 
             vista.imprimir("2. [(])");
-            int opcion = Integer.parseInt(vista.ingresar(""));
+            int opcion = -1;
+            try {
+                opcion = Integer.parseInt(vista.ingresar(""));
+            } catch (NumberFormatException e) {}
             switch(opcion){
                 case 1: 
                     respuesta = verificarEquilibrio("[()]");
