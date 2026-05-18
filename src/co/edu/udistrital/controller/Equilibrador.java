@@ -54,8 +54,8 @@ public class Equilibrador {
             vista.imprimir("Seleccione una opcion");
             vista.imprimir("1. Usar cadena preestablecida"); 
             vista.imprimir("2. Ingresar cadena"); 
-            selector = Integer.parseInt(vista.ingresar(""));
-            switch (selector){   
+            int opcion = Integer.parseInt(vista.ingresar(""));
+            switch (opcion){   
                 case 1:
                     casoPreestablecido();
                     selector =0 ;
@@ -64,7 +64,8 @@ public class Equilibrador {
                     casoNoDefinido();
                     selector =0 ;
                     break;    
-               
+               default:
+                    vista.imprimir("Opcion no valida");
            }
         }while (selector != 0);
         
