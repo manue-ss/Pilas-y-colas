@@ -7,7 +7,7 @@ package co.edu.udistrital.controller;
 public class Main {
 
     public static void main(String[] args) {
-        AsignacionTareas control = new AsignacionTareas();
-        control.iniciar();
+        Controller control = new Controller();
+        control.run();
     }
 }

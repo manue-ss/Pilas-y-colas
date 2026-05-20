@@ -1,6 +1,8 @@
 package co.edu.udistrital.controller;
 
 import co.edu.udistrital.view.ConsoleView;
+import co.edu.udistrital.model.AsignacionTareas;
+import co.edu.udistrital.model.Equilibrador;
 
 /**
  * Controlador principal que gestiona la selección de programas.
@@ -8,6 +10,7 @@ import co.edu.udistrital.view.ConsoleView;
 public class Controller {
     
     private ConsoleView vista;
+    
 
     public Controller() {
         vista = new ConsoleView();
@@ -16,7 +19,7 @@ public class Controller {
     /**
      * Inicia el menú principal para seleccionar el subprograma a ejecutar.
      */
-    public void iniciar() {
+    public void run() {
         int opcion = 0;
         
         while (opcion != 3) {
