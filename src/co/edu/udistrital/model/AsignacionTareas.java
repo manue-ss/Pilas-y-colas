@@ -158,26 +158,53 @@ public class AsignacionTareas {
      * sumando el tiempo transcurrido y calcula el tiempo medio de finalización
      * total al concluir el proceso.
      */
+    /**
+     * Extrae las tareas de la cola simulando su ejecución en múltiples
+     * procesadores. Asigna cada tarea al procesador que se libere más
+     * pronto, sumando los tiempos y calculando el promedio.
+     */
     private void procesar() {
         if (cola.isEmpty()) {
             vista.imprimir("\nNo hay tareas para procesar.");
             return;
         }
 
-        int tiempo = 0;
-        long sumaTiempos = 0;
-        int totalTareas = cola.size();
+        try {
+            int numProcesadores = Integer.parseInt(vista.ingresar("\nIngrese el número de procesadores: "));
+            
+            if (numProcesadores <= 0) {
+                throw new NumberFormatException();
+            }
 
-        vista.imprimir("");
-        while (!cola.isEmpty()) {
-            Tarea actual = cola.dequeue();
-            tiempo += actual.getTi();
-            sumaTiempos += tiempo;
+            int[] tiempoProcesadores = new int[numProcesadores];
+            long sumaTiempos = 0;
+            int totalTareas = cola.size();
 
-            vista.imprimir(actual.getNombre() + " finalizó en el minuto " + tiempo);
+            vista.imprimir("");
+            
+            while (!cola.isEmpty()) {
+                Tarea actual = cola.dequeue();
+                
+                int mejorProcesador = 0;
+                for (int i = 1; i < numProcesadores; i++) {
+                    if (tiempoProcesadores[i] < tiempoProcesadores[mejorProcesador]) {
+                        mejorProcesador = i;
+                    }
+                }
+                
+                tiempoProcesadores[mejorProcesador] += actual.getTi();
+                int tiempoFinalizacion = tiempoProcesadores[mejorProcesador];
+                
+                sumaTiempos += tiempoFinalizacion;
+
+                vista.imprimir("Procesador " + (mejorProcesador + 1) + " ejecutó " + actual.getNombre() + " (Finalizó en el min " + tiempoFinalizacion + ")");
+            }
+
+            double promedio = (double) sumaTiempos / totalTareas;
+            vista.imprimir("\nTiempo medio de finalización: " + promedio);
+
+        } catch (NumberFormatException e) {
+            vista.imprimir("\nError: El número de procesadores debe ser un entero mayor a cero.");
         }
-
-        double promedio = (double) sumaTiempos / totalTareas;
-        vista.imprimir("\nTiempo medio de finalización: " + promedio);
     }
 }
