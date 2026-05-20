@@ -6,12 +6,18 @@ import co.edu.udistrital.model.Equilibrador;
 
 /**
  * Controlador principal que gestiona la selección de programas.
+ *
+ * @author sg812
  */
 public class Controller {
     
     private ConsoleView vista;
     
 
+    /**
+     * Constructor de la clase Controller.
+     * Inicializa la vista de consola para la interacción con el usuario.
+     */
     public Controller() {
         vista = new ConsoleView();
     }

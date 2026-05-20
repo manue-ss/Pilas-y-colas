@@ -3,6 +3,8 @@ package co.edu.udistrital.view;
 import java.util.Scanner;
 
 /**
+ * Clase que maneja la interacción con el usuario a través de la consola.
+ * Permite imprimir mensajes y recibir entrada de texto.
  *
  * @author Manuel S
  */
@@ -10,6 +12,9 @@ public class ConsoleView {
 
     private Scanner sc = new Scanner(System.in);
 
+    /**
+     * Constructor por defecto de la clase ConsoleView.
+     */
     public ConsoleView() {
     }
 

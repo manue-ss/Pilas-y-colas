@@ -1,6 +1,5 @@
-package co.edu.udistrital.controller;
+package co.edu.udistrital.model;
 
-import co.edu.udistrital.model.Tarea;
 import co.edu.udistrital.model.estructuras.Queue;
 import co.edu.udistrital.view.ConsoleView;
 
@@ -154,14 +153,9 @@ public class AsignacionTareas {
     }
 
     /**
-     * Extrae secuencialmente las tareas de la cola simulando su ejecución. Va
-     * sumando el tiempo transcurrido y calcula el tiempo medio de finalización
-     * total al concluir el proceso.
-     */
-    /**
-     * Extrae las tareas de la cola simulando su ejecución en múltiples
-     * procesadores. Asigna cada tarea al procesador que se libere más
-     * pronto, sumando los tiempos y calculando el promedio.
+     * Extrae secuencialmente las tareas de la cola simulando su ejecución en múltiples
+     * procesadores. Asigna cada tarea al procesador que se libere más pronto,
+     * sumando los tiempos y calculando el tiempo medio de finalización total al concluir el proceso.
      */
     private void procesar() {
         if (cola.isEmpty()) {
