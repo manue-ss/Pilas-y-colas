@@ -25,6 +25,8 @@ replay_pid*
 
 # --- Configuraciones locales de NetBeans ---
 nbproject/private/
+nbproject/
+build.xml
 
 # --- Carpetas de compilación y distribución ---
 build/
