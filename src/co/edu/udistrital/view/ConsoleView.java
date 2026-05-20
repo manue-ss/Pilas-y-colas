@@ -31,6 +31,7 @@ public class ConsoleView {
      * Recibe un dato ingresado por el usuario
      *
      * @param mensaje mensjae asociado al dato
+     *
      * @return cadena de caracteres con el dato
      */
     public String ingresar(String mensaje) {

@@ -1,131 +1,82 @@
 package co.edu.udistrital.model;
 
 import co.edu.udistrital.model.estructuras.Queue;
-import co.edu.udistrital.view.ConsoleView;
 
 /**
- * Controlador principal que gestiona el sistema de asignación de tareas.
+ * Modelo que representa la lógica de asignación de tareas. Esta clase NO
+ * realiza operaciones de entrada/salida.
  *
  * @author sg812
  */
 public class AsignacionTareas {
 
-    private ConsoleView vista;
     private Queue<Tarea> cola;
 
     /**
-     * Constructor por defecto. Inicializa los valores de la vista y la cola.
+     * Constructor por defecto. Inicializa la cola de tareas.
      */
     public AsignacionTareas() {
-        vista = new ConsoleView();
         cola = new Queue<>();
     }
 
     /**
-     * Inicia el menú principal del sistema.
+     * Añade una nueva tarea a la cola, insertándola en la posición
+     * correspondiente para mantener un orden de prioridad (de menor a mayor
+     * tiempo).
+     *
+     * @param nombre   Nombre o descripción de la tarea.
+     * @param duracion Tiempo de duración de la tarea.
+     *
+     * @throws IllegalArgumentException Si el nombre está vacío o la duración es
+     *                                  inválida.
      */
-    public void iniciar() {
-        int opcion = 0;
-        while (opcion != 5) {
-            vista.imprimir("\nSISTEMA DE TAREAS"
-                    + "\n1. Dar de alta tarea"
-                    + "\n2. Eliminar tarea"
-                    + "\n3. Mostrar tareas"
-                    + "\n4. Procesar tareas"
-                    + "\n5. Salir");
+    public void addTask(String nombre, int duracion) {
+        if (nombre == null || nombre.trim().isEmpty()) {
+            throw new IllegalArgumentException("El nombre no puede estar vacío.");
+        }
+        if (duracion <= 0) {
+            throw new IllegalArgumentException("La duración debe ser un entero mayor a cero.");
+        }
 
-            try {
-                opcion = Integer.parseInt(vista.ingresar("Seleccione una opción: "));
-                switch (opcion) {
-                    case 1:
-                        darDeAlta();
-                        break;
-                    case 2:
-                        eliminar();
-                        break;
-                    case 3:
-                        mostrar();
-                        break;
-                    case 4:
-                        procesar();
-                        break;
-                    case 5:
-                        vista.imprimir("\nSistema cerrado con éxito.");
-                        break;
-                    default:
-                        vista.imprimir("\nOpción no válida.");
-                }
-            } catch (NumberFormatException e) {
-                vista.imprimir("\nError: Ingrese un número válido.");
-            }
+        Tarea nueva = new Tarea(nombre, duracion);
+        Queue<Tarea> colaAuxiliar = new Queue<>();
+
+        while (!cola.isEmpty() && cola.front().getTi() <= nueva.getTi()) {
+            colaAuxiliar.enqueue(cola.dequeue());
+        }
+
+        colaAuxiliar.enqueue(nueva);
+
+        while (!cola.isEmpty()) {
+            colaAuxiliar.enqueue(cola.dequeue());
+        }
+
+        while (!colaAuxiliar.isEmpty()) {
+            cola.enqueue(colaAuxiliar.dequeue());
         }
     }
 
     /**
-     * Solicita los datos para añadir una nueva tarea a la cola, insertándola en
-     * la posición correspondiente para mantener un orden de prioridad (de menor
-     * a mayor tiempo).
+     * Busca y elimina de la cola una tarea específica introducida mediante su
+     * nombre. Hace uso de una cola auxiliar para preservar las demás tareas en
+     * su orden correcto.
+     *
+     * @param nombre Nombre de la tarea a eliminar.
+     *
+     * @return {@code true} si la tarea fue encontrada y eliminada,
+     *         {@code false} en caso contrario.
      */
-    private void darDeAlta() {
-        try {
-            String nombre = vista.ingresar("Nombre de la tarea: ");
-
-            if (nombre.trim().isEmpty()) {
-                throw new IllegalArgumentException("El nombre no puede estar vacío.");
-            }
-
-            int duracion = Integer.parseInt(vista.ingresar("Duración de la tarea: "));
-
-            if (duracion <= 0) {
-                throw new NumberFormatException();
-            }
-
-            Tarea nueva = new Tarea(nombre, duracion);
-            Queue<Tarea> colaAuxiliar = new Queue<>();
-
-            while (!cola.isEmpty() && cola.front().getTi() <= nueva.getTi()) {
-                colaAuxiliar.enqueue(cola.dequeue());
-            }
-
-            colaAuxiliar.enqueue(nueva);
-
-            while (!cola.isEmpty()) {
-                colaAuxiliar.enqueue(cola.dequeue());
-            }
-
-            while (!colaAuxiliar.isEmpty()) {
-                cola.enqueue(colaAuxiliar.dequeue());
-            }
-
-            vista.imprimir("\nTarea registrada exitosamente.");
-
-        } catch (NumberFormatException e) {
-            vista.imprimir("\nError: La duración debe ser un número entero mayor a cero.");
-        } catch (IllegalArgumentException e) {
-            vista.imprimir("\nError: " + e.getMessage());
-        }
-    }
-
-    /**
-     * Busca y elimina de la cola una tarea específica introducida por el
-     * usuario mediante su nombre. Hace uso de una cola auxiliar para preservar
-     * las demás tareas en su orden correcto.
-     */
-    private void eliminar() {
+    public boolean removeTaskByName(String nombre) {
         if (cola.isEmpty()) {
-            vista.imprimir("\nLa cola está vacía.");
-            return;
+            return false;
         }
 
-        String nombreBuscar = vista.ingresar("Nombre de la tarea a eliminar: ");
         Queue<Tarea> colaAuxiliar = new Queue<>();
         boolean encontrado = false;
 
         while (!cola.isEmpty()) {
             Tarea actual = cola.dequeue();
-
-            if (actual.getNombre().equalsIgnoreCase(nombreBuscar) && !encontrado) {
-                vista.imprimir("\nLa tarea '" + nombreBuscar + "' ha sido eliminada.");
+            if (actual.getNombre().equalsIgnoreCase(nombre) && !encontrado) {
                 encontrado = true;
             } else {
                 colaAuxiliar.enqueue(actual);
@@ -136,69 +87,90 @@ public class AsignacionTareas {
             cola.enqueue(colaAuxiliar.dequeue());
         }
 
-        if (!encontrado) {
-            vista.imprimir("\nNo se encontró una tarea con ese nombre.");
-        }
+        return encontrado;
     }
 
     /**
-     * Muestra la lista de tareas que están pendientes por procesar.
+     * Devuelve una representación en texto de las tareas que están pendientes
+     * por procesar.
+     *
+     * @return Un {@code String} con la lista de tareas.
      */
-    private void mostrar() {
+    public String listTasks() {
         if (cola.isEmpty()) {
-            vista.imprimir("\nNo hay tareas pendientes en la cola.");
-        } else {
-            vista.imprimir(cola.toString());
+            return "No hay tareas pendientes en la cola.";
         }
+        return cola.toString();
     }
 
     /**
-     * Extrae secuencialmente las tareas de la cola simulando su ejecución en múltiples
-     * procesadores. Asigna cada tarea al procesador que se libere más pronto,
-     * sumando los tiempos y calculando el tiempo medio de finalización total al concluir el proceso.
+     * Verifica si la cola de tareas está vacía.
+     *
+     * @return {@code true} si no hay tareas pendientes, {@code false} en caso
+     *         contrario.
      */
-    private void procesar() {
+    public boolean isEmpty() {
+        return cola.isEmpty();
+    }
+
+    /**
+     * Consulta el número de tareas pendientes en la cola.
+     *
+     * @return El tamaño actual de la cola de tareas.
+     */
+    public int size() {
+        return cola.size();
+    }
+
+    /**
+     * Extrae secuencialmente las tareas de la cola simulando su ejecución en
+     * múltiples procesadores. Asigna cada tarea al procesador que se libere más
+     * pronto, sumando los tiempos y calculando el tiempo medio de finalización
+     * total al concluir el proceso.
+     *
+     * @param numProcesadores Cantidad de procesadores disponibles para ejecutar
+     *                        las tareas.
+     *
+     * @return Un {@code String} con el reporte detallado de qué procesador
+     *         ejecutó cada tarea y el tiempo medio de finalización.
+     *
+     * @throws IllegalArgumentException Si el número de procesadores no es
+     *                                  válido.
+     */
+    public String processTasks(int numProcesadores) {
         if (cola.isEmpty()) {
-            vista.imprimir("\nNo hay tareas para procesar.");
-            return;
+            return "No hay tareas para procesar.";
+        }
+        if (numProcesadores <= 0) {
+            throw new IllegalArgumentException("El número de procesadores debe ser mayor a cero.");
         }
 
-        try {
-            int numProcesadores = Integer.parseInt(vista.ingresar("\nIngrese el número de procesadores: "));
-            
-            if (numProcesadores <= 0) {
-                throw new NumberFormatException();
-            }
+        int[] tiempoProcesadores = new int[numProcesadores];
+        long sumaTiempos = 0;
+        int totalTareas = cola.size();
+        StringBuilder sb = new StringBuilder();
 
-            int[] tiempoProcesadores = new int[numProcesadores];
-            long sumaTiempos = 0;
-            int totalTareas = cola.size();
+        while (!cola.isEmpty()) {
+            Tarea actual = cola.dequeue();
 
-            vista.imprimir("");
-            
-            while (!cola.isEmpty()) {
-                Tarea actual = cola.dequeue();
-                
-                int mejorProcesador = 0;
-                for (int i = 1; i < numProcesadores; i++) {
-                    if (tiempoProcesadores[i] < tiempoProcesadores[mejorProcesador]) {
-                        mejorProcesador = i;
-                    }
+            int mejorProcesador = 0;
+            for (int i = 1; i < numProcesadores; i++) {
+                if (tiempoProcesadores[i] < tiempoProcesadores[mejorProcesador]) {
+                    mejorProcesador = i;
                 }
-                
-                tiempoProcesadores[mejorProcesador] += actual.getTi();
-                int tiempoFinalizacion = tiempoProcesadores[mejorProcesador];
-                
-                sumaTiempos += tiempoFinalizacion;
-
-                vista.imprimir("Procesador " + (mejorProcesador + 1) + " ejecutó " + actual.getNombre() + " (Finalizó en el min " + tiempoFinalizacion + ")");
             }
 
-            double promedio = (double) sumaTiempos / totalTareas;
-            vista.imprimir("\nTiempo medio de finalización: " + promedio);
+            tiempoProcesadores[mejorProcesador] += actual.getTi();
+            int tiempoFinalizacion = tiempoProcesadores[mejorProcesador];
+            sumaTiempos += tiempoFinalizacion;
 
-        } catch (NumberFormatException e) {
-            vista.imprimir("\nError: El número de procesadores debe ser un entero mayor a cero.");
+            sb.append("Procesador ").append(mejorProcesador + 1)
+                    .append(" ejecutó ").append(actual.getNombre())
+                    .append(" (Finalizó en el min ").append(tiempoFinalizacion).append(")\n");
         }
+
+        double promedio = (double) sumaTiempos / totalTareas;
+        sb.append("\nTiempo medio de finalización: ").append(promedio);
+        return sb.toString();
     }
 }

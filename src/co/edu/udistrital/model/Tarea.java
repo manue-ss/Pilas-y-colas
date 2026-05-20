@@ -14,7 +14,7 @@ public class Tarea {
      * Constructor para inicializar una nueva tarea.
      *
      * @param nombre Nombre o descripción de la tarea.
-     * @param ti Tiempo de duración de la tarea.
+     * @param ti     Tiempo de duración de la tarea.
      */
     public Tarea(String nombre, int ti) {
         this.nombre = nombre;

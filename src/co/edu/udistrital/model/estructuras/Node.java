@@ -2,7 +2,8 @@ package co.edu.udistrital.model.estructuras;
 
 /**
  * Clase que representa un nodo individual en una estructura de datos dinámica.
- * Almacena un dato de tipo genérico y una referencia al siguiente nodo enlazado.
+ * Almacena un dato de tipo genérico y una referencia al siguiente nodo
+ * enlazado.
  *
  * @author Manuel Salazar
  * @since 0.1
@@ -33,7 +34,8 @@ class Node<T> {
     /**
      * Obtiene la referencia al siguiente nodo.
      *
-     * @return El nodo siguiente en la secuencia, o {@code null} si no hay siguiente.
+     * @return El nodo siguiente en la secuencia, o {@code null} si no hay
+     *         siguiente.
      */
     public Node<T> getSiguiente() {
         return siguiente;
@@ -67,7 +69,8 @@ class Node<T> {
     }
 
     /**
-     * Devuelve una representación en formato de cadena del dato contenido en el nodo.
+     * Devuelve una representación en formato de cadena del dato contenido en el
+     * nodo.
      *
      * @return Representación en texto del dato almacenado.
      */
