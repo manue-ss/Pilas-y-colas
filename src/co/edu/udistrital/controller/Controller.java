@@ -1,24 +1,53 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package co.edu.udistrital.controller;
 
+import co.edu.udistrital.view.ConsoleView;
+
 /**
- *
- * @author acurr
+ * Controlador principal que gestiona la selección de programas.
  */
 public class Controller {
     
-    public void run(){
-        
+    private ConsoleView vista;
+
+    public Controller() {
+        vista = new ConsoleView();
     }
-    
-    private void equilibrador(){
+
+    /**
+     * Inicia el menú principal para seleccionar el subprograma a ejecutar.
+     */
+    public void iniciar() {
+        int opcion = 0;
         
-    }
-    
-    private void asignador(){
-        
+        while (opcion != 3) {
+            vista.imprimir("\n=== MENÚ PRINCIPAL ===");
+            vista.imprimir("1. Sistema de Asignación de Tareas");
+            vista.imprimir("2. Equilibrador de Símbolos");
+            vista.imprimir("3. Salir del programa");
+
+            try {
+                opcion = Integer.parseInt(vista.ingresar("Seleccione qué programa desea ejecutar: "));
+                
+                switch (opcion) {
+                    case 1:
+                        vista.imprimir("\n--- Iniciando Asignación de Tareas ---");
+                        AsignacionTareas asignacion = new AsignacionTareas();
+                        asignacion.iniciar();
+                        break;
+                    case 2:
+                        vista.imprimir("\n--- Iniciando Equilibrador ---");
+                        Equilibrador equilibrador = new Equilibrador();
+                        equilibrador.imprimirMenuEquilibrador();
+                        break;
+                    case 3:
+                        vista.imprimir("\nCerrando el sistema general. ¡Hasta pronto!");
+                        break;
+                    default:
+                        vista.imprimir("\nOpción no válida. Intente de nuevo.");
+                }
+            } catch (NumberFormatException e) {
+                vista.imprimir("\nError: Ingrese un número válido.");
+            }
+        }
     }
 }
