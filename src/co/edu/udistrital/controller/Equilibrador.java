@@ -7,10 +7,22 @@ import co.edu.udistrital.model.estructuras.Stack;
 import co.edu.udistrital.view.ConsoleView;
 
 /**
- *
+ * Clase controladora encargada de verificar si una expresión de símbolos 
+ * de agrupación (paréntesis, corchetes y llaves) está correctamente equilibrada.
+ * También gestiona la interacción con el usuario mediante un menú de consola.
+ * 
  * @author acurr
  */
 public class Equilibrador {
+    
+    /**
+     * Verifica si una expresión de caracteres tiene sus símbolos de agrupación
+     * correctamente equilibrados utilizando una pila.
+     * 
+     * @param expresion La cadena de texto que contiene los símbolos a evaluar.
+     * @return Un String con el resultado de la evaluación: "Equilibrada" si es correcta, 
+     *         o un mensaje de error detallando la causa del desequilibrio.
+     */
     public String verificarEquilibrio(String expresion){
         Stack<Character> pila = new Stack<>();
         
@@ -40,12 +52,24 @@ public class Equilibrador {
                
     }
     
+    /**
+     * Compara un carácter de apertura con uno de cierre para determinar 
+     * si son del mismo tipo (ej. '(' con ')').
+     * 
+     * @param apertura El carácter de apertura a evaluar.
+     * @param cierre El carácter de cierre a evaluar.
+     * @return {@code true} si los caracteres forman una pareja válida, {@code false} en caso contrario.
+     */
     public boolean esPareja(char apertura, char cierre){
         return (apertura =='(' && cierre == ')')||
                (apertura =='[' && cierre == ']')||
                (apertura =='{' && cierre == '}');
     }
     
+    /**
+     * Muestra el menú principal de la aplicación en la consola.
+     * Permite al usuario elegir entre usar cadenas preestablecidas o ingresar una propia.
+     */
     public void imprimirMenuEquilibrador(){
         ConsoleView vista = new ConsoleView();
         int selector = 9;
@@ -74,6 +98,11 @@ public class Equilibrador {
         
         
     }
+    
+    /**
+     * Despliega un submenú que evalúa casos de prueba fijos o preestablecidos.
+     * Evalúa las cadenas "[()]" y "[(])" como demostración del funcionamiento.
+     */
     public void casoPreestablecido(){
         ConsoleView vista = new ConsoleView();
         int caso = 9;
@@ -104,6 +133,10 @@ public class Equilibrador {
         
     }
     
+    /**
+     * Solicita al usuario ingresar una cadena por consola, valida que la entrada
+     * contenga únicamente símbolos permitidos y luego evalúa si está equilibrada.
+     */
     public void casoNoDefinido (){
         ConsoleView vista = new ConsoleView();
         int validacion = 1;
@@ -121,6 +154,15 @@ public class Equilibrador {
         
         
     }
+    
+    /**
+     * Valida mediante una expresión regular que la cadena ingresada contenga 
+     * única y exclusivamente caracteres de agrupación válidos.
+     * 
+     * @param expresion La cadena que se desea validar.
+     * @return {@code true} si la cadena contiene solo los símbolos '(', ')', '[', ']', '{', '}'. 
+     *         Retorna {@code false} si contiene otros caracteres, si es nula o si está vacía.
+     */
     public static boolean soloContieneSimbolos(String expresion) {
     // Verificamos que no sea nula o vacía primero (opcional dependiendo de tu lógica)
     if (expresion == null || expresion.isEmpty()) {
