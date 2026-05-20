@@ -9,8 +9,16 @@ package co.edu.udistrital.controller;
  * @author acurr
  */
 public class Controller {
-    public static void main(String[] args) {
-        Equilibrador equilibrador =  new Equilibrador();
-        equilibrador.imprimirMenuEquilibrador();
+    
+    public void run(){
+        
+    }
+    
+    private void equilibrador(){
+        
+    }
+    
+    private void asignador(){
+        
     }
 }

@@ -1,7 +1,7 @@
 package co.edu.udistrital.controller;
 
 import co.edu.udistrital.model.Tarea;
-import co.edu.udistrital.model.Queue;
+import co.edu.udistrital.model.estructuras.Queue;
 import co.edu.udistrital.view.ConsoleView;
 
 /**
